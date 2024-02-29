@@ -1,4 +1,6 @@
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+import 'package:untitled/e_commerce/controller/auth_controller.dart';
 import 'package:untitled/e_commerce/views/home_screen/home.dart';
 
 import '../../consts/consts.dart';
@@ -17,6 +19,13 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   bool isChecked = false;
+  var controller = Get.put(AuthController());
+
+  // text Controlller
+  var nameController = TextEditingController();
+  var emailController = TextEditingController();
+  var passController = TextEditingController();
+  var retypePassController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +42,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
             10.heightBox,
             Column(
               children: [
-                customTextField(title: name, hint: hintName),
+                customTextField(
+                    title: name, hint: hintName, controller: nameController),
                 10.heightBox,
-                customTextField(title: email, hint: emailHint),
+                customTextField(
+                    title: email, hint: emailHint, controller: emailController),
                 10.heightBox,
-                customTextField(title: pass, hint: passHint),
+                customTextField(
+                    title: pass, hint: passHint, controller: passController),
                 10.heightBox,
-                customTextField(title: pass, hint: passHint),
+                customTextField(
+                    title: pass,
+                    hint: passHint,
+                    controller: retypePassController),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -90,8 +105,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     color: isChecked ? redColor : lightGrey,
                     textColor: whiteColor,
                     title: signup,
-                    onPress: () {
-                        Get.to(() => const Home());
+                    onPress: () async {
+                      //Get.to(() => const Home());
+                      if (isChecked) {
+                        try {
+                          await controller
+                              .signUpMethod(emailController.text,
+                                  passController.text, context)
+                              .then((value) {
+                            return controller.storeUserData(
+                              nameController.text,
+                              passController.text,
+                              emailController.text,
+                            );
+                          }).then((value) {
+                            VxToast.show(context, msg: "Logged In");
+                            Get.offAll(() => {const Home()});
+                          });
+                        } catch (e) {
+                          auth.signOut();
+                          VxToast.show(context, msg: e.toString());
+                        }
+                      }
                     }).box.rounded.width(context.screenWidth - 50).make(),
                 10.heightBox,
                 RichText(

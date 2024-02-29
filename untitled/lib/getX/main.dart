@@ -14,6 +14,9 @@ import 'home.dart';
 import 'screens/add_reviews.dart';
 import 'screens/update_menu.dart';
 
+
+//Get.off = replace previous activity
+//Get.to = add new activity above previous act..
 void main() async {
   await GetStorage.init();
   await Get.putAsync(() => StorageService().init());
