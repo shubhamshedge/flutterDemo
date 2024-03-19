@@ -75,6 +75,8 @@ dependencies:
   graphql_flutter: ^5.2.0-beta.6
   shimmer: ^3.0.0
   firebase_core_platform_interface: ^5.0.0
+  firebase_database: ^10.4.0
+
 
 dev_dependencies:
   flutter_test:
