@@ -49,11 +49,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
   static const platform = MethodChannel('com.venkat.battery');
 
   // Get battery level.
   String _batteryLevel = 'Unknown battery level.';
-  String _toastValue = 'Callback from Native code';
 
   Future<void> _getBatteryLevel() async {
     String batteryLevel;
@@ -69,18 +69,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  showToast() async {
-    String toastValue;
-    try {
-      final String result = await platform
-          .invokeMethod('showToast', {'message': 'Its Native code toast'});
-      toastValue = result;
-    } on PlatformException catch (e) {
-      toastValue = "Failed to get battery level: '${e.message}'.";
-    }
-
+  void _incrementCounter() {
     setState(() {
-      _toastValue = toastValue;
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
     });
   }
 
@@ -88,26 +84,17 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: _getBatteryLevel,
-            child: const Text('Get Battery Level'),
-          ),
-          ElevatedButton(
-            onPressed: showToast,
-            child: const Text('Show Toast With Data'),
-          ),
-          const SizedBox(
-            height: 80,
-          ),
-          Text(_batteryLevel),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(_toastValue),
-        ],
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: _getBatteryLevel,
+              child: const Text('Get Battery Level'),
+            ),
+            Text(_batteryLevel),
+          ],
+        ),
       ),
     );
   }
